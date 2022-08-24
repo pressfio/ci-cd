@@ -7,10 +7,12 @@ on:
         description: 'The dotnet version to use'
         default: '6.0.x'
         required: false
+        type: string
       namespace:
         description: 'K8S namespace for deployment'
         default: 'plendy'
         required: false
+        type: string
     secrets:
       inherit
 
