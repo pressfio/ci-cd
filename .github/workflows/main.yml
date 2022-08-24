@@ -8,17 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build dotnet
-        uses: ../../dotnet-build
+        uses: ./dotnet-build
         with:
           dotnet-version: 6.0.x
           nuget-pat: ${{ secrets.NUGET_REPO_TOKEN }}
           
       - name: Build and push container
-        uses: ../../docker-build-push
+        uses: ./docker-build-push
         
   deploy-stage:
     needs: [prepare_container]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy stage
-        uses: ../../deploy-helm-staging
+        uses: ./deploy-helm-staging
