@@ -13,7 +13,7 @@ on:
         default: 'plendy'
         required: false
         type: string
-        
+
 jobs:
   build-and-push-docker:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
         dotnet-version: ${{ inputs.dotnet-version }}
 
     - name: Configure nuget
-      run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password ${{ secrets.NUGET_TOKEN }}
+      run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password ${{ secrets.NUGET_TOKEN }} --store-password-in-clear-text
       shell: bash
 
     - name: Restore project
