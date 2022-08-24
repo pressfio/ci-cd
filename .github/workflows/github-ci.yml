@@ -13,8 +13,7 @@ on:
         default: 'plendy'
         required: false
         type: string
-    secrets:
-      inherit
+    secrets: inherit
 
 jobs:
   build-and-push-docker:
