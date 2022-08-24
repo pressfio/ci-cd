@@ -89,11 +89,11 @@ jobs:
     - name: Install chart
       run: |
           helm upgrade \
-            ${{ env.IMAGE_NAME }} pressfio \ 
             --install \
             --atomic \
             --timeout 1m \ 
             --values .plendy/values.yaml \
             --namespace ${{ inputs.namespace }} \ 
-            --create-namespace 
+            --create-namespace \
+            ${{ env.IMAGE_NAME }} pressfio 
       shell: bash
