@@ -24,7 +24,7 @@ jobs:
           dotnet-version: ${{ inputs.dotnet-version }}
 
       - name: Configure nuget
-        run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password ${{ secrets.nugetPAT }}
+        run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password ${{ secrets.nuget-pat }}
         shell: bash
 
       - name: Restore project
