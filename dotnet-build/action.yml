@@ -1,30 +1,36 @@
 name: dotnet-build
-description: Builds dotnet project
-inputs:
-  dotnet-version:
-    description: 'The dotnet version to use'
-    default: '6.0.x'
-    required: false
 
-runs:
-  using: composite
-  steps: 
-    - name: Checkout the code
-      uses: actions/checkout@v2
-      
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ inputs.dotnet-version }}
+on:
+  inputs:
+    dotnet-version:
+      description: 'The dotnet version to use'
+      default: '6.0.x'
+      required: false
+  secrets:
+    nuget-pat:
+      required: true
 
-    - name: Configure nuget
-      run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password "${{ secrets.NUGET_REPO_TOKEN }}"
-      shell: bash
+jobs:
+  dotnet_build:
+    name: Builds source code
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout the code
+        uses: actions/checkout@v2
 
-    - name: Restore project
-      run: dotnet restore
-      shell: bash
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
 
-    - name: Build project
-      run: dotnet publish -c Release -o ${{ github.event.repository.name }}
-      shell: bash
+      - name: Configure nuget
+        run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password ${{ secrets.nugetPAT }}
+        shell: bash
+
+      - name: Restore project
+        run: dotnet restore
+        shell: bash
+
+      - name: Build project
+        run: dotnet publish -c Release -o ${{ github.event.repository.name }}
+        shell: bash
