@@ -17,7 +17,7 @@ jobs:
         uses: ./docker-build-push
         
   deploy-stage:
-    needs: [prepare_container]
+    needs: [prepare-container]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy stage
