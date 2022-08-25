@@ -24,6 +24,23 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+
+    - name: Configure nuget
+      run: dotnet nuget add source https://nuget.pkg.github.com/pressfio/index.json --name "pressfio" --username "pressfio-bot" --password ${{ secrets.NUGET_TOKEN }} --store-password-in-clear-text
+      shell: bash
+
+    - name: Restore project
+      run: dotnet restore
+      shell: bash
+
+    - name: Build project
+      run: dotnet publish -c Release -o ${{ github.event.repository.name }}
+      shell: bash
+
     - name: Log in to the Container registry
       uses: docker/login-action@v2.0.0
       with:
