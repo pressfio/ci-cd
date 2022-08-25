@@ -24,17 +24,6 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
-    - name: Set variables
-      id: vars
-      run: | 
-        echo ::set-output name=project_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
-        echo ::set-output name=repo_tag::`git describe --tags` | sed -e 's/v//';
-
-    - name: Echo variables
-      run: |
-       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
-       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }}; \
-
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
       with:
@@ -90,11 +79,12 @@ jobs:
       id: vars
       run: | 
         echo ::set-output name=project_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
-        echo ::set-output name=repo_tag::git describe --tags | sed -e 's/v//';
+        echo ::set-output name=repo_tag::`git describe --tags` | sed -e 's/v//';
 
     - name: Echo variables
       run: |
        echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
+       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }}; \
     
     - name: Create kube config
       run: |
