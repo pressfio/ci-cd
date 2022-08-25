@@ -27,13 +27,13 @@ jobs:
     - name: Set variables
       id: vars
       run: | 
-        echo ::set-output name=project_name::echo ${{ github.repository }} | sed 's/pressfio\///'; \
+        echo ::set-output name=project_name::${{ github.repository }} | sed 's/pressfio\///'; \
         echo ::set-output name=repo_tag::git describe --tags `git rev-list --tags --max-count=1`
 
     - name: Echo variables
       run: |
-       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }};\n \
-       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }};\n
+       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
+       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }};
 
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
