@@ -56,6 +56,10 @@ jobs:
         flavor: latest=false
         tags: |
           type=semver,pattern={{version}}
+
+    - name: Echo variables
+      run: |
+       echo PROJECT_NAME=${{ steps.meta.outputs.labels }}; \
     
     - name: Build and push Docker image
       uses: docker/build-push-action@v3.1.1
@@ -64,9 +68,7 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    
-    outputs:
-      image-version: ${{ steps.meta.outputs.labels.org.opencontainers.image.version }}
+
 
   deploy-stage:
     needs: [build-and-push-docker]
@@ -79,11 +81,8 @@ jobs:
       id: vars
       run: | 
         echo ::set-output name=chart_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
-        echo ::set-output name=image_name::${{ github.event.repository.name }} | sed -e 's/[A-Z]/\L&/g';
-
-    - name: Echo variables
-      run: |
-       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
+        echo ::set-output name=image_repo::${{ github.event.repository.name }} | sed -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=image_tag::`git describe --tags` | sed 's/v//';
     
     - name: Create kube config
       run: |
@@ -117,6 +116,6 @@ jobs:
             --create-namespace \
             --set image.registry=${{ env.CONTAINER_REGISTRY }} \
             --set image.repo=${{ steps.vars.outputs.image_name }} \
-            --set image.tag=${{ steps.vars.outputs.image-version }} \
+            --set image.tag=${{ steps.vars.outputs.image_tag }} \
             ${{ steps.vars.outputs.chart_name }} pressfio/plendy-backend
       shell: bash
