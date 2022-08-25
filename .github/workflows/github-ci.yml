@@ -53,6 +53,7 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: ${{ env.CONTAINER_REGISTRY }}/${{ github.repository }}
+        flavor: latest=false
     
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -63,7 +64,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
     
     outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
+      image-repo: ${{ steps.meta.outputs.tags }}
 
   deploy-stage:
     needs: [build-and-push-docker]
@@ -110,8 +111,6 @@ jobs:
             --values .plendy/values.yaml \
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
-            --set image.registry = ${{ env.CONTAINER_REGISTRY }}
-            --set image.name = ${{ github.repository }}
-            --set image.tag = ${{ needs.build-and-push-docker.outputs.image-tag }}
+            --set image.repository = ${{ needs.build-and-push-docker.outputs.image-repo }}
             ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
       shell: bash
