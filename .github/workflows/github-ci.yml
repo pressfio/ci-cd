@@ -24,6 +24,17 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
+    - name: Set variables
+      id: vars
+      run: | 
+        echo ::set-output name=project_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=repo_tag::git describe --tags | sed -e 's/v//';
+
+    - name: Echo variables
+      run: |
+       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
+       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }}; \
+
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
       with:
@@ -42,7 +53,7 @@ jobs:
       shell: bash
 
     - name: Log in to the Container registry
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      uses: docker/login-action@v2.0.0
       with:
         registry: ${{ env.CONTAINER_REGISTRY }}
         username: ${{ github.actor }}
@@ -50,7 +61,7 @@ jobs:
     
     - name: Extract metadata for Docker
       id: meta
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      uses: docker/metadata-action@v4.0.1
       with:
         images: ${{ env.CONTAINER_REGISTRY }}/${{ github.repository }}
         flavor: latest=false
@@ -58,7 +69,7 @@ jobs:
           type=semver,pattern={{version}}
     
     - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      uses: docker/build-push-action@v3.1.1
       with:
         context: ${{ github.event.repository.name }}
         push: true
@@ -79,6 +90,7 @@ jobs:
       id: vars
       run: | 
         echo ::set-output name=project_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=repo_tag::git describe --tags | sed -e 's/v//';
 
     - name: Echo variables
       run: |
@@ -116,6 +128,6 @@ jobs:
             --create-namespace \
             --set image.registry=${{ env.CONTAINER_REGISTRY }} \
             --set image.repo=${{ github.repository }} \
-            --set image.tag=${{ needs.build-and-push-docker.outputs.image-tag }} \
+            --set image.tag=${{ steps.vars.outputs.repo_tag }} \
             ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
       shell: bash
