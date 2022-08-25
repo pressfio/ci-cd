@@ -56,10 +56,6 @@ jobs:
         flavor: latest=false
         tags: |
           type=semver,pattern={{version}}
-
-    - name: Echo variables
-      run: |
-       echo PROJECT_NAME=${{ steps.meta.outputs.labels }}; \
     
     - name: Build and push Docker image
       uses: docker/build-push-action@v3.1.1
