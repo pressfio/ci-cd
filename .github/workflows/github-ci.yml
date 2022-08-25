@@ -28,7 +28,7 @@ jobs:
       id: vars
       run: | 
         echo ::set-output name=project_name::${{ github.repository }} | sed 's/pressfio\///'; \
-        echo ::set-output name=repo_tag::git describe --tags `git rev-list --tags --max-count=1`
+        echo ::set-output name=repo_tag::`git describe --tags `git rev-list --tags --max-count=1``
 
     - name: Echo variables
       run: |
@@ -72,6 +72,10 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+    
+    outputs:
+      project-name: ${{ steps.vars.outputs.project_name }}
+      repo-tag: ${{ steps.vars.outputs.repo_tag }}
 
   deploy-stage:
     needs: [build-and-push-docker]
@@ -109,5 +113,5 @@ jobs:
             --values .plendy/values.yaml \
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
-            ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
+            ${{ needs.build-and-push-docker.outputs.project_name }} pressfio/plendy-backend
       shell: bash
