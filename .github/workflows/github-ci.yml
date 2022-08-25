@@ -24,11 +24,14 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
-    - name: Set project name var
-      run: echo ::set-output name=project_name::echo github.repository | sed 's/pressfio\///'
+    - name: Set variables
+      id: vars
+      run: | 
+        echo ::set-output name=project_name::echo github.repository | sed 's/pressfio\///' \
+        echo ::set-output name=repo_tag::git describe --tags `git rev-list --tags --max-count=1`
 
-    - name: Set tag var
-      run: echo ::set-output name=repo_tag::git describe --tags `git rev-list --tags --max-count=1`
+    - name: Echo variables
+      run: echo PROJECT_NAME=${{ steps.vars.outputs.project_name }};\n REPO_TAG=${{ steps.vars.outputs.repo_tag }};\n
 
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
