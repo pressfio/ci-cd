@@ -87,6 +87,10 @@ jobs:
       run: helm repo add pressfio https://pressfio.github.io/helm
       shell: bash
 
+    - name: Update Plendy Helm repo
+      run: helm repo update pressfio
+      shell: bash
+
     - name: Install chart
       run: |
           helm upgrade \
