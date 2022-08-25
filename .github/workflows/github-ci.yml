@@ -27,8 +27,8 @@ jobs:
     - name: Set variables
       id: vars
       run: | 
-        echo ::set-output name=project_name::${{ github.repository }} | sed 's/pressfio\///'; \
-        echo ::set-output name=repo_tag::git describe --tags
+        echo ::set-output name=project_name::${{ github.repository }} | sed -e 's/pressfio\///' -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=repo_tag::`git describe --tags`
 
     - name: Echo variables
       run: |
