@@ -111,6 +111,6 @@ jobs:
             --values .plendy/values.yaml \
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
-            --set image.repository=${{ needs.build-and-push-docker.outputs.image-repo }}
+            --set image.repository=${{ needs.build-and-push-docker.outputs.image-repo }} \
             ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
       shell: bash
