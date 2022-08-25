@@ -16,8 +16,6 @@ on:
 
 env:
   CONTAINER_REGISTRY: ghcr.io
-  PROJECT_NAME: ${{ echo github.repository | sed 's/pressfio\///' }}
-  PROJECT_TAG: ${{ git describe --tags `git rev-list --tags --max-count=1` }}
 
 jobs:
   build-and-push-docker:
@@ -25,6 +23,14 @@ jobs:
     steps: 
     - name: Checkout the code
       uses: actions/checkout@v2
+
+    - name: Set project name var
+      id: vars
+      run: echo ::set-output name=project_name::echo github.repository | sed 's/pressfio\///'
+
+    - name: Set tag var
+      id: vars
+      run: echo ::set-output name=repo_tag::git describe --tags `git rev-list --tags --max-count=1`
 
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
@@ -100,5 +106,5 @@ jobs:
             --values .plendy/values.yaml \
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
-            ${{ env.PROJECT_NAME }} pressfio/plendy-backend
+            ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
       shell: bash
