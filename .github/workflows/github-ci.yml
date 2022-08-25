@@ -76,7 +76,7 @@ jobs:
     - name: Set variables
       id: vars
       run: | 
-        echo ::set-output name=project_name::${{ github.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=project_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
 
     - name: Echo variables
       run: |
