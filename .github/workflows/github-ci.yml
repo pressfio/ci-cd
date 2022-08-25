@@ -76,7 +76,7 @@ jobs:
     - name: Set variables
       id: vars
       run: | 
-        echo ::set-output name=project_name::${{ github.repository }} | sed -e 's/pressfio\///' -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=project_name::${{ github.repository.name }} | -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
 
     - name: Echo variables
       run: |
@@ -103,6 +103,7 @@ jobs:
       shell: bash
 
     - name: Install chart
+      working-directory: ${{ github.event.repository.name }}
       run: |
           helm upgrade \
             --install \
