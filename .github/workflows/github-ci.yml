@@ -66,7 +66,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
     
     outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
+      image-version: ${{ steps.meta.outputs.labels.org.opencontainers.image.version }}
 
   deploy-stage:
     needs: [build-and-push-docker]
@@ -78,13 +78,12 @@ jobs:
     - name: Set variables
       id: vars
       run: | 
-        echo ::set-output name=project_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
-        echo ::set-output name=repo_tag::`git describe --tags` | sed -e 's/v//';
+        echo ::set-output name=chart_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=image_name::${{ github.event.repository.name }} | sed -e 's/[A-Z]/\L&/g';
 
     - name: Echo variables
       run: |
        echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
-       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }}; \
     
     - name: Create kube config
       run: |
@@ -117,7 +116,7 @@ jobs:
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
             --set image.registry=${{ env.CONTAINER_REGISTRY }} \
-            --set image.repo=${{ github.repository }} \
-            --set image.tag=${{ steps.vars.outputs.repo_tag }} \
-            ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
+            --set image.repo=${{ steps.vars.outputs.image_name }} \
+            --set image.tag=${{ steps.vars.outputs.image-version }} \
+            ${{ steps.vars.outputs.chart_name }} pressfio/plendy-backend
       shell: bash
