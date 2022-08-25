@@ -38,7 +38,7 @@ jobs:
       shell: bash
 
     - name: Build project
-      run: dotnet publish -c Release -o ${{ github.event.repository.name }}
+      run: dotnet publish -c Release -o ${{ github.event.repository.name }}/release
       shell: bash
 
     - name: Log in to the Container registry
