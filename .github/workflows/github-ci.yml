@@ -65,10 +65,6 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-    outputs:
-      image-version: ${{ steps.meta.outputs.labels.org.opencontainers.image.version }}
-
-
   deploy-stage:
     needs: [build-and-push-docker]
     runs-on: ubuntu-latest
@@ -81,6 +77,7 @@ jobs:
       run: | 
         echo ::set-output name=chart_name::${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
         echo ::set-output name=image_repo::${{ github.event.repository.name }} | sed -e 's/[A-Z]/\L&/g'; \
+        echo ::set-output name=tag::`git describe --tags` | sed -e 's/v//'; 
     
     - name: Create kube config
       run: |
@@ -113,7 +110,7 @@ jobs:
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
             --set image.registry=${{ env.CONTAINER_REGISTRY }} \
-            --set image.repo=${{ steps.vars.outputs.image_name }} \
-            --set image.tag=${{ needs.build-and-push-docker.outputs.image-version }} \
+            --set image.repo=${{ steps.vars.outputs.image_repo }} \
+            --set image.tag=${{ steps.vars.outputs.tag }} \
             ${{ steps.vars.outputs.chart_name }} pressfio/plendy-backend
       shell: bash
