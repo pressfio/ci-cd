@@ -17,7 +17,7 @@ on:
 env:
   CONTAINER_REGISTRY: ghcr.io
   PROJECT_NAME: echo ${{ github.repository }} | sed 's/pressfio\///'
-  PROJECT_TAG: ${{ GITHUB_REF }}
+  PROJECT_TAG: git describe --tags `git rev-list --tags --max-count=1`
 
 jobs:
   build-and-push-docker:
