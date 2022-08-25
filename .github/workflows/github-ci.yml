@@ -24,17 +24,6 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
-    - name: Set variables
-      id: vars
-      run: | 
-        echo ::set-output name=project_name::${{ github.repository }} | sed -e 's/pressfio\///' -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
-        echo ::set-output name=repo_tag::`git describe --tags`
-
-    - name: Echo variables
-      run: |
-       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
-       echo REPO_TAG=${{ steps.vars.outputs.repo_tag }};
-
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
       with:
@@ -74,8 +63,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
     
     outputs:
-      project-name: ${{ steps.vars.outputs.project_name }}
-      repo-tag: ${{ steps.vars.outputs.repo_tag }}
+      image-tag: ${{ steps.meta.outputs.tags }}
 
   deploy-stage:
     needs: [build-and-push-docker]
@@ -83,6 +71,15 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
+
+    - name: Set variables
+      id: vars
+      run: | 
+        echo ::set-output name=project_name::${{ github.repository }} | sed -e 's/pressfio\///' -e 's/\./-/' -e 's/[A-Z]/\L&/g'; \
+
+    - name: Echo variables
+      run: |
+       echo PROJECT_NAME=${{ steps.vars.outputs.project_name }}; \
     
     - name: Create kube config
       run: |
@@ -113,5 +110,8 @@ jobs:
             --values .plendy/values.yaml \
             --namespace ${{ inputs.namespace }} \
             --create-namespace \
-            ${{ needs.build-and-push-docker.outputs.project-name }} pressfio/plendy-backend
+            --set image.registry = ${{ env.CONTAINER_REGISTRY }}
+            --set image.name = ${{ github.repository }}
+            --set image.tag = ${{ needs.build-and-push-docker.outputs.image-tag }}
+            ${{ steps.vars.outputs.project_name }} pressfio/plendy-backend
       shell: bash
