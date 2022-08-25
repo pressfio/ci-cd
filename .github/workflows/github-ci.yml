@@ -55,7 +55,6 @@ jobs:
         images: ${{ env.CONTAINER_REGISTRY }}/${{ github.repository }}
         flavor: latest=false
         tags: |
-          # minimal
           type=semver,pattern={{version}}
     
     - name: Build and push Docker image
