@@ -8,15 +8,14 @@ RUN set -eu \
 	&& apt-get upgrade -y \
 	&& apt-get install -y  \
 		gcc \
-		bash \
 		git \
 		make \
 		curl \
 		tar \
 		unzip
 
-COPY Makefile /Makefile
-COPY entrypoint.sh /entrypoint.sh
+COPY content /builder
+WORKDIR /builder
 
 RUN set -eu; \
 	make bootstrap

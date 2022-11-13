@@ -1,0 +1,13 @@
+name: github-ci
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  call-common-ci:
+    uses: pressfio/ci-cd/.github/workflows/github-ci.yml@v0.0.53
+    with: 
+      namespace: plendy
+    secrets: inherit
