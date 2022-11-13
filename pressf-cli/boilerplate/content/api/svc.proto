@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package example.api;
 
-option go_package = "api/stubs/go";
+option go_package = "api/stubs";
 
 service ExampleV1 {
     rpc EchoV1 (EchoV1Request)

@@ -20,6 +20,6 @@ WORKDIR /builder
 RUN set -eu; \
 	make bootstrap
 
-ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/builder/entrypoint.sh"]
 
 CMD ["bash"]

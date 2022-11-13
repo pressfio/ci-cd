@@ -20,12 +20,6 @@ shell: FORCE
 build: FORCE
 	go build -o app
 
-fetch_common_lib: CUR_DIR := $(shell pwd;)
-fetch_common_lib: FORCE
-	cd /usr/local/include/go-common-lib
-	git pull
-	cd $(CUR_DIR)
-
 generate_common_types: FORCE
 	protoc -I protobuf/common \
 		--go_out=$(PROJECT_DIR) \

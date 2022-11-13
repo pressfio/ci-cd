@@ -120,7 +120,7 @@ common_lib: FORCE
 	git clone \
 		--quiet \
 		--no-checkout \
-		https://pressfio-bot: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@github.com/pressfio/go-common-lib.git \
+		https://pressfio-bot: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@github.com/pressfio/go-common-lib.git \
 		/usr/local/include/go-common-lib
 	cd /usr/local/include/go-common-lib \
 		&& git sparse-checkout init --cone \
