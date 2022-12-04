@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: bitnami/postgresql:14
+    environment:
+      POSTGRESQL_EXTRA_FLAGS: ""
+      # setups db on first time run.
+      #
+      POSTGRESQL_DATABASE: 'sentinel'
+      POSTGRESQL_USERNAME: 'sentinel'
+      POSTGRESQL_PASSWORD: 'sentinel'
+      # setups 'postgres' user password.
+      #
+      POSTGRESQL_POSTGRES_PASSWORD: 'postgres'
+    expose:
+      - 5432

@@ -1,4 +1,16 @@
 package main
 
+import (
+	"github.com/pressfio/go-common-lib/app"
+	migrate_cmd "github.com/pressfio/go-common-lib/cmd/db/migrate"
+)
+
 func main() {
+	// appOts := app.NewOption().
+	//	 WithCmdF(api.SetupCmd).
+	// 	 WithCmdF(migrate_cmd.SetupCmd(migrations.Source))
+
+	// app := app.MustNew(appOts)
+
+	// app.Exec()
 }

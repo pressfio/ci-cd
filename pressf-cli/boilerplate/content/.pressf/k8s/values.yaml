@@ -1,0 +1,90 @@
+service:
+  name: 'sentinel'
+  replicas: 1
+  ports:
+    grpc: true
+    metrics: true
+  env:
+    - name: SERVICE_EXCHANGE_NAME
+      value: sentinel-events
+    - name: LOG_LEVEL
+      value: Debug
+    - name: ELASTIC_ADDRESS
+      value: http://93.95.97.137:29200
+    - name: GRPC_LISTEN_PORT
+      value: '5000'
+    - name: JAEGER_AGENT_HOST
+      value: 93.95.97.137
+    - name: JAEGER_AGENT_PORT
+      value: '6831'
+    - name: ASI_AUTH_EP
+      value: https://appleid.apple.com/auth/token
+    - name: ASI_MOBILE_CLIENT_ID
+      value: app.plendy
+    - name: ASI_WEB_CLIENT_ID
+      value: app.plendy.service
+    - name: ASI_PUBLIC_KEYS_EP
+      value: https://appleid.apple.com/auth/keys
+    - name: ASI_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: plendy-secrets
+          key: asi-key-id
+    - name: EMAIL_CODES_EXPIRATION_TIME_SEC
+      value: '600'
+    - name: EMAIL_CODES_LENGTH
+      value: '4'
+    - name: USER_SESSION_LIFETIME_SEC
+      value: '1209600'
+    - name: MAX_ACTIVE_USER_SESSIONS
+      value: '5'
+    - name: JWT_APPLE_SIGN_IN_AUDIENCE
+      value: https://appleid.apple.com
+    - name: JWT_PLENDY_APP_AUDIENCE
+      value: plendy.app
+    - name: JWT_APPLE_SIGN_IN_ISSUER
+      value: https://appleid.apple.com
+    - name: JWT_PLENDY_APP_ISSUER
+      value: GJ65G8Z62T
+    - name: JWT_ACCESS_TOKEN_LIFETIME_SEC
+      value: '1209600'
+    - name: JWT_APPLE_SIGN_IN_TOKEN_LIFETIME_SEC
+      value: '1209600'
+    - name: JWT_ACCESS_TOKEN_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: plendy-secrets
+          key: access-token-secret
+    - name: JWT_REFRESH_TOKEN_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: plendy-secrets
+          key: refresh-token-secret
+    - name: RMQ_HOST
+      value: 93.95.97.137
+    - name: RMQ_PORT
+      value: '5672'
+    - name: RMQ_VHOST
+      value: plendy
+    - name: RMQ_USERNAME
+      value: plendy
+    - name: RMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: plendy-secrets
+          key: rmq-password
+    - name: RMQ_RECOVERY_INTERVAL_SEC
+      value: '5'
+    - name: PG_DB_NAME
+      value: Plendy.Sentinel
+    - name: PG_DB_HOST
+      value: 93.95.97.137
+    - name: PG_DB_PORT
+      value: '25432'
+    - name: PG_DB_USER
+      value: sentinel
+    - name: PG_DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: plendy-secrets
+          key: sentinel-pg-password
