@@ -7,7 +7,7 @@ TMP_DIR   := /tmp
 
 GO             := $(LOCAL_DIR)/go/bin/go
 PROTOC         := $(BIN_DIR)/protoc
-DART         := $(BIN_DIR)/dart
+DART           := $(BIN_DIR)/dart
 CURL           := curl --location --fail --silent --create-dirs --output
 KERNEL_VERSION := $(shell uname -s | tr A-Z a-z;)
 ARCH_VERSION   := $(shell uname -m;)
@@ -69,7 +69,11 @@ ifneq '$(UID)' '0'
 endif
 
 # golang -> install {{{
-GO_SRC_URL   := https://dl.google.com/go/go$(GO_VERSION).$(KERNEL_VERSION)-amd64.tar.gz
+ifeq '$(ARCH_VERSION)' 'aarch64'
+$(GO): ARCH_VERSION := arm64
+endif
+
+GO_SRC_URL   = https://dl.google.com/go/go$(GO_VERSION).$(KERNEL_VERSION)-$(ARCH_VERSION).tar.gz
 GO_SRC_TAR   := $(TMP_DIR)/go.tar.gz
 
 $(GO):
@@ -88,8 +92,12 @@ ifeq '$(ARCH_VERSION)' 'x86_64'
 $(DART): ARCH_VERSION := x64
 endif
 
+ifeq '$(ARCH_VERSION)' 'aarch64'
+$(DART): ARCH_VERSION := arm64
+endif
+
 DART_SRC_URL = https://storage.googleapis.com/dart-archive/channels/stable/release/$(DART_VERSION)/sdk/dartsdk-$(KERNEL_VERSION)-$(ARCH_VERSION)-release.zip
-DART_SRC_ZIP   := $(TMP_DIR)/dart.zip
+DART_SRC_ZIP := $(TMP_DIR)/dart.zip
 
 $(DART):
 	$(SUDO) $(CURL) $(DART_SRC_ZIP) $(DART_SRC_URL)
@@ -103,6 +111,10 @@ $(DART):
 # protoc -> install {{{
 ifeq '$(KERNEL_VERSION)' 'darwin'
 $(PROTOC): KERNEL_VERSION := osx
+endif
+
+ifeq '$(ARCH_VERSION)' 'aarch64'
+$(PROTOC): ARCH_VERSION := aarch_64
 endif
 
 PROTOC_URL       = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC_VERSION)/protoc-$(PROTOC_VERSION)-$(KERNEL_VERSION)-$(ARCH_VERSION).zip
@@ -120,7 +132,7 @@ common_lib: FORCE
 	git clone \
 		--quiet \
 		--no-checkout \
-		https://pressfio-bot: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@github.com/pressfio/go-common-lib.git \
+		https://pressfio-bot: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@github.com/pressfio/go-common-lib.git \
 		/usr/local/include/go-common-lib
 	cd /usr/local/include/go-common-lib \
 		&& git sparse-checkout init --cone \
