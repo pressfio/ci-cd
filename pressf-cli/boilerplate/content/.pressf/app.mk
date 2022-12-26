@@ -23,13 +23,16 @@ generate_common_types: FORCE
 		--go_out=$(PROJECT_DIR) \
         --go_opt=paths=import \
         protobuf/common/*.proto 
-
+		
 generate_api: FORCE
 	protoc -I api/ \
-		--dart_out=grpc:api/stubs/dart/lib \
 		--go_out=$(PROJECT_DIR) \
       	--go_opt=paths=import \
 		--go-grpc_out=$(PROJECT_DIR) \
       	--go-grpc_opt=paths=import,require_unimplemented_servers=false \
+		api/*.proto 
+
+	protoc -I api/ \
+		--dart_out=grpc:api/stubs/dart/lib \
 		api/*.proto \
 		/usr/local/include/google/protobuf/*.proto
