@@ -1,0 +1,7 @@
+module github.com/pressfio/svc
+
+go 1.19
+
+require (
+    github.com/pressfio/go-common-lib v0.0.5
+)
