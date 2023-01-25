@@ -12,7 +12,7 @@ DEDICATED_REGISTRY_OWNER ?= pressfio
 # }}}
 
 # BUILDER variables {{{
-BUILDER_IMAGE_NAME    ?= pressf-builder
+BUILDER_IMAGE_NAME    ?= pressfio/builder
 BUILDER_IMAGE_VERSION ?= 0.0.2
 BUILDER_IMAGE         := ${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}
 # }}}
