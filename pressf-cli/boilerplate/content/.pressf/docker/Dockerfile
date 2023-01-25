@@ -22,7 +22,7 @@ RUN set -eu \
 		RELEASE_TIMESTAMP="${RELEASE_TIMESTAMP}" \
 	&& test -x /tmp/app
 
-FROM scratch
+FROM --platform=linux/amd64 scratch
 
 # Tracing information about app.
 ARG PROJECT_NAME
