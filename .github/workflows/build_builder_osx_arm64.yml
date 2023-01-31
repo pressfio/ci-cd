@@ -1,0 +1,19 @@
+name: Build Builder (osx/arm64)
+
+on:
+  push:
+    tags:
+      - 'builder/*'
+
+env:
+  BUILDER_PLATFORM: osx/arm64
+
+jobs:
+  setup-docker:
+    uses: ./.github/workflows/build.yml
+  
+  build-builder:
+    uses: ./.github/workflows/build.yml
+    with:
+      platform: $BUILDER_PLATFORM
+    secrets: inherit
