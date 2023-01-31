@@ -1,0 +1,13 @@
+name: Build and publish Builder (linux/arm64)
+
+on:
+  push:
+    tags:
+      - 'builder/*'
+
+jobs:
+  build_publish:
+    uses: ./.github/workflows/build_publish.yml
+    with:
+      platform: linux/arm64
+    secrets: inherit
