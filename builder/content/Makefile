@@ -146,7 +146,10 @@ go: FORCE $(GO)
 dart: FORCE $(DART)
 protoc: FORCE $(PROTOC)
 toolset: FORCE $(GO_TOOLSET)
-bootstrap: FORCE go dart protoc common_lib toolset clean
+# bootstrap: FORCE go dart protoc common_lib toolset clean
+
+bootstrap: FORCE dart protoc common_lib toolset clean
+
 clean: FORCE
 	$(GO) clean -modcache -cache -fuzzcache -testcache
 
