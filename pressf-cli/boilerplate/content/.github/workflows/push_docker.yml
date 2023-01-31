@@ -1,0 +1,15 @@
+name: push_docker
+
+on:
+  repository_dispatch:
+    types: [trigger-push-docker]
+
+jobs:
+  push-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: Push image
+      run: make docker_push
+      shell: bash
