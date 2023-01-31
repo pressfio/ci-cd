@@ -1,4 +1,6 @@
-FROM --platform=linux/amd64 debian:bullseye-slim
+ARG $TARGETPLATFORM
+
+FROM --platform=$TARGETPLATFORM debian:bullseye-slim
 
 ARG BOT_SECRET
 ENV PATH="${PATH}:/usr/local/go/bin"
