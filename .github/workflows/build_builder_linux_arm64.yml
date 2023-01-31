@@ -1,0 +1,13 @@
+name: Build Builder (linux/arm64)
+
+on:
+  push:
+    tags:
+      - 'builder/*'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      platform: linux/arm64
+    secrets: inherit
