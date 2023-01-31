@@ -69,6 +69,10 @@ ifneq '$(UID)' '0'
 endif
 
 # golang -> install {{{
+ifeq '$(ARCH_VERSION)' 'x86_64'
+$(GO): ARCH_VERSION := amd64
+endif
+
 ifeq '$(ARCH_VERSION)' 'aarch64'
 $(GO): ARCH_VERSION := arm64
 endif

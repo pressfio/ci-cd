@@ -2,17 +2,21 @@
 FORCE:
 
 DEDICATED_REGISTRY    ?= ghcr.io
-BUILDER_IMAGE_NAME    ?= pressf-builder
+BUILDER_IMAGE_NAME    ?= pressfio/builder
 BUILDER_IMAGE_VERSION ?= 
+BUILDER_PLATFORM 	  ?= linux/amd64
 BOT_SECRET            ?= 
 
 build: FORCE
 	docker build \
-		-t "${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}" \
-		--build-arg BOT_SECRET=$(BOT_SECRET) \
+		--tag="${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}" \
+		--build-arg=BOT_SECRET=$(BOT_SECRET) \
 		--pull=true \
 		--network=host \
 		--force-rm=true \
 		--rm=true \
-		--no-cache=true \
+		--platform=$(BUILDER_PLATFORM) \
 		.
+
+push: FORCE
+	docker push "${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}"
