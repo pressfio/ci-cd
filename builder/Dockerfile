@@ -1,5 +1,6 @@
-FROM --platform=linux/amd64 debian:bullseye-slim
+FROM --platform=$BUILDPLATFORM debian:bullseye-slim
 
+ARG BUILDPLATFORM
 ARG BOT_SECRET
 ENV PATH="${PATH}:/usr/local/go/bin"
 
