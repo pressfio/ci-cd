@@ -1,0 +1,21 @@
+name: push_docker
+
+on:
+  repository_dispatch:
+    types: [trigger-push-docker]
+
+jobs:
+  push-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: Set variables
+      id: vars
+      run: echo "image_tag="`git tag | grep builder | head -n 1 | sed -e 's/builder\///'`"" >> $GITHUB_OUTPUT;
+    - name: Push image
+      env:
+        BUILDER_IMAGE_VERSION: ${{ steps.vars.outputs.image_tag }}
+      working-directory: builder
+      run: make push
+      shell: bash
