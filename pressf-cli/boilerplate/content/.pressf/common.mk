@@ -14,6 +14,7 @@ DEDICATED_REGISTRY_OWNER ?= pressfio
 # BUILDER variables {{{
 BUILDER_IMAGE_NAME    ?= pressfio/builder
 BUILDER_IMAGE_VERSION ?= 0.0.2
+BUILDER_PLATFORM	  ?= linux/amd64
 BUILDER_IMAGE         := ${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}
 # }}}
 
@@ -21,6 +22,8 @@ BUILDER_IMAGE         := ${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_I
 GO_LD_APP_PKG := github.com/pressfio/go-common-lib/app/info/fields
 GO_BUILDFLAGS ?= -mod=vendor -o=/tmp/app
 CGO_ENABLED   ?= 0
+TARGET_ARCH   ?= amd64
+TARGET_OS	  ?= linux
 # }}}
 
 # GIT variables {{{
@@ -49,4 +52,5 @@ shell: FORCE
 		--volume /var/run/docker.sock:/var/run/docker.sock \
 		--volume ${PROJECT_DIR}:/app:delegated \
 		--workdir /app \
+		--platform=${BUILDER_PLATFORM} \
 		${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}

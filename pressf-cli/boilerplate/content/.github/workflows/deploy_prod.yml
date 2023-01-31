@@ -1,0 +1,10 @@
+name: Deploy App Prod
+
+on: workflow_dispatch
+
+env:
+  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_PROD }}
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
