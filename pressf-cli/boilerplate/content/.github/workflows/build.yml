@@ -1,13 +1,25 @@
 name: Build app image
 
-on: push
+on: 
+  workflow_call:
+    inputs:
+      push:
+        default: false
+        type: boolean
+        description: publish image after build
+        required: true
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
 
 env:
   CONTAINER_REGISTRY: ghcr.io
   ACTOR: pressfio-bot
 
-jobs:
-  setup-docker:
+jobs:  
+  build:
     runs-on: ubuntu-latest
     steps: 
     - name: Set up Docker Buildx
@@ -18,10 +30,6 @@ jobs:
         registry: ${{ env.CONTAINER_REGISTRY }}
         username: ${{ env.ACTOR }}
         password: ${{ secrets.BOT_SECRET }}
-  
-  build-app:
-    runs-on: ubuntu-latest
-    steps: 
     - name: Checkout the code
       uses: actions/checkout@v2
     - name: Test app
@@ -29,11 +37,7 @@ jobs:
       shell: bash
     - name: Build app image
       env:
-        USE_BUILDX: true
-        TARGET_ARCH: ${{ env.TARGET_ARCH }}
+        USE_GHA_CACHE: true
+        PUBLISH_AFTER_BUILD: ${{ inputs.push }}
       run: make docker_build
       shell: bash
-
-  push-app:
-    if: success() && startsWith(github.ref, 'refs/tags/')
-    uses: ./.github/workflows/publish.yml

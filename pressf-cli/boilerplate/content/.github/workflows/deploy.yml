@@ -3,6 +3,10 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      image-version:
+        type: string
+        description: image version to deploy
+        required: true
       namespace:
         description: 'K8S namespace for deployment'
         default: 'plendy'

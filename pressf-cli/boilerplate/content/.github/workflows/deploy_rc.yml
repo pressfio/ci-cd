@@ -5,7 +5,7 @@ on:
     inputs:
       namespace:
         description: 'K8S namespace for deployment'
-        default: 'plendy'
+        default: 'plendy-rc'
         required: false
         type: string
 
@@ -15,3 +15,5 @@ env:
 jobs:
   deploy:
     uses: ./.github/workflows/deploy.yml
+    with:
+      namespace: ${{ inputs.namespace }}

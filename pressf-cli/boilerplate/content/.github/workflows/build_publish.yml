@@ -1,0 +1,17 @@
+name: Build and publish app image
+
+on:
+  push:
+    tags:
+      - '**'
+
+env:
+  CONTAINER_REGISTRY: ghcr.io
+  ACTOR: pressfio-bot
+
+jobs:  
+  build-publish:
+    uses: ./.github/workflows/build.yml
+    with:
+      push: true
+    secrets: inherit

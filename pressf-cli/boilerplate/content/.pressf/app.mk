@@ -12,19 +12,11 @@ define LDFLAGS
 endef
 
 build: FORCE 
-	GOARCH=$(TARGET_ARCH) \
-	GOOS=$(TARGET_OS) \
 	CGO_ENABLED=$(CGO_ENABLED) \
 		go build \
 			$(GO_BUILDFLAGS) \
 			-ldflags="$(LDFLAGS)" \
 			$|
-
-build_amd64: TARGET_ARCH := amd64
-build_amd64: build
-
-build_arm64: TARGET_ARCH := arm64
-build_arm64: build
 # }}}
 
 generate_common_types: FORCE

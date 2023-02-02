@@ -1,6 +1,12 @@
 name: Deploy App Dev
 
 on:
+  workflow_call:
+    inputs:
+      image-version:
+        type: string
+        description: image version to deploy
+        required: true
   workflow_dispatch:
     inputs:
       namespace:
@@ -15,3 +21,6 @@ env:
 jobs:
   deploy:
     uses: ./.github/workflows/deploy.yml
+    with:
+      namespace: ${{ inputs.namespace }}
+      image-version: ${{ inputs.image-version }}

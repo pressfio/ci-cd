@@ -13,7 +13,7 @@ DEDICATED_REGISTRY_OWNER ?= pressfio
 
 # BUILDER variables {{{
 BUILDER_IMAGE_NAME    ?= pressfio/builder
-BUILDER_IMAGE_VERSION ?= 0.0.2
+BUILDER_IMAGE_VERSION ?= 0.0.46
 BUILDER_PLATFORM	  ?= linux/amd64
 BUILDER_IMAGE         := ${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_IMAGE_VERSION}
 # }}}
@@ -22,8 +22,6 @@ BUILDER_IMAGE         := ${DEDICATED_REGISTRY}/${BUILDER_IMAGE_NAME}:${BUILDER_I
 GO_LD_APP_PKG := github.com/pressfio/go-common-lib/app/info/fields
 GO_BUILDFLAGS ?= -mod=vendor -o=/tmp/app
 CGO_ENABLED   ?= 0
-TARGET_ARCH   ?= amd64
-TARGET_OS	  ?= linux
 # }}}
 
 # GIT variables {{{
@@ -38,6 +36,10 @@ PROJECT_NAME      := $(shell basename `git rev-parse --show-toplevel;`)
 RELEASE_AUTHOR    := $(shell echo "`git config user.Name` <`git config user.email`>";)
 RELEASE_TIMESTAMP := $(shell date +'%Y-%m-%dT%H:%M:%S%z';)
 APP_VERSION       := $(GIT_TAG)
+ifeq ($(APP_VERSION),)
+APP_VERSION := $(GIT_SHORT_SHA)
+endif
+
 # }}}
 
 # This is trick to let subst with space work properly
