@@ -1,12 +1,9 @@
 name: Build and publish builder
 
-on: 
-  workflow_call:
-    inputs:
-      platform:
-        description: 'Target platform'
-        required: true
-        type: string
+on:
+  push:
+    tags:
+      - 'builder/*'
 
 env:
   CONTAINER_REGISTRY: ghcr.io
@@ -32,15 +29,10 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v2
 
-    - name: Build image
+    - name: Build and publish image
       env:
         BOT_SECRET: ${{ secrets.BOT_SECRET }}
-        BUILDER_PLATFORM: ${{ inputs.platform }}
+        TARGET_PLATFORMS_LIST: ${{ inputs.target_platforms_list }}
       working-directory: builder
       run: make build
-      shell: bash
-      
-    - name: Push image
-      working-directory: builder
-      run: make push
       shell: bash
