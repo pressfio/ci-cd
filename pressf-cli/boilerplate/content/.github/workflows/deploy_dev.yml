@@ -1,26 +1,31 @@
 name: Deploy App Dev
 
 on:
-  workflow_call:
-    inputs:
-      image-version:
-        type: string
-        description: image version to deploy
-        required: true
+  push:
+    branches:
+      - 'main'
+    tags:
+      - '*-dev-*'
   workflow_dispatch:
     inputs:
       namespace:
         description: 'K8S namespace for deployment'
-        default: 'plendy'
+        default: 'plendy-dev'
         required: false
         type: string
 
-env:
-  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DEV }}
-
 jobs:
+  build-publish:
+    uses: ./.github/workflows/build.yml
+    with:
+      push: true
+    secrets: inherit
+
   deploy:
+    # needs: [build-publish]
     uses: ./.github/workflows/deploy.yml
     with:
-      namespace: ${{ inputs.namespace }}
-      image-version: ${{ inputs.image-version }}
+      namespace: ${{ inputs.namespace || 'plendy-dev' }}
+      values-path: .pressf/k8s/values.dev.yaml
+    secrets:
+      kube-config: ${{ secrets.KUBE_CONFIG_DEV }}

@@ -64,4 +64,4 @@ service:
 
 grpcIngress:
   enabled: true
-  host: sentinel.plendy.app
+  host: rc.sentinel.plendy.app

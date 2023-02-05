@@ -3,15 +3,19 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      image-version:
-        type: string
-        description: image version to deploy
-        required: true
       namespace:
         description: 'K8S namespace for deployment'
         default: 'plendy'
-        required: false
+        required: true
         type: string
+      values-path:
+        description: 'Helm values file path'
+        required: true
+        type: string
+    secrets:
+      kube-config:
+        description: 'K8S config'
+        required: true
 
 env:
   CONTAINER_REGISTRY: ghcr.io
@@ -26,14 +30,14 @@ jobs:
     - name: Set variables
       id: vars
       run: | 
-        echo "chart_name=${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'" >> $GITHUB_OUTPUT; \
-        echo "image_repo=${{ github.repository }} | sed -e 's/[A-Z]/\L&/g'" >> $GITHUB_OUTPUT; \
-        echo "image_tag="`git tag | head -n 1`"" >> $GITHUB_OUTPUT;
+        echo "chart_name="${{ github.event.repository.name }} | sed -e 's/\./-/' -e 's/[A-Z]/\L&/g'"" >> $GITHUB_OUTPUT; \
+        echo "image_repo="${{ github.repository }} | sed -e 's/[A-Z]/\L&/g'"" >> $GITHUB_OUTPUT; \
+        echo "image_tag="`(git describe --tags --exact-match 2> /dev/null) || (git rev-parse --short=8 HEAD)`"" >> $GITHUB_OUTPUT;
     
     - name: Create kube config
       run: |
         mkdir -p $HOME/.kube/
-        echo "${{ env.KUBE_CONFIG }}" > $HOME/.kube/config
+        echo "${{ secrets.kube-config }}" > $HOME/.kube/config
         chmod 600 $HOME/.kube/config
       shell: bash
 
@@ -51,15 +55,13 @@ jobs:
       shell: bash
 
     - name: Install chart
-      working-directory: ${{ github.event.repository.name }}
       run: |
           helm upgrade \
             --install \
             --atomic \
             --timeout 1m \
-            --values .pressf/k8s/values.yaml \
+            --values ${{ inputs.values-path }} \
             --namespace ${{ inputs.namespace }} \
-            --create-namespace \
             --set image.registry=${{ env.CONTAINER_REGISTRY }} \
             --set image.repo=${{ steps.vars.outputs.image_repo }} \
             --set image.tag=${{ steps.vars.outputs.image_tag }} \

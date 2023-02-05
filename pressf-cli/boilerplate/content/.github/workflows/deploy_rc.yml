@@ -1,6 +1,9 @@
 name: Deploy App RC
 
 on:
+  push:
+    tags:
+      - '*-rc-*'
   workflow_dispatch:
     inputs:
       namespace:
@@ -9,11 +12,18 @@ on:
         required: false
         type: string
 
-env:
-  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_RC }}
-
 jobs:
+  build-publish:
+    uses: ./.github/workflows/build.yml
+    with:
+      push: true
+    secrets: inherit
+
   deploy:
+    needs: [build-publish]
     uses: ./.github/workflows/deploy.yml
     with:
       namespace: ${{ inputs.namespace }}
+      values-path: .pressf/k8s/values.rc.yaml
+    secrets:
+      kube-config: ${{ secrets.KUBE_CONFIG_RC }}

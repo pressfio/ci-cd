@@ -2,9 +2,17 @@ name: Deploy App Prod
 
 on: workflow_dispatch
 
-env:
-  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_PROD }}
-
 jobs:
+  build-publish:
+    uses: ./.github/workflows/build.yml
+    with:
+      push: true
+    secrets: inherit
+
   deploy:
+    needs: [build-publish]
     uses: ./.github/workflows/deploy.yml
+    with:
+      values-path: .pressf/k8s/values.yaml
+    secrets:
+      kube-config: ${{ secrets.KUBE_CONFIG_PROD }}

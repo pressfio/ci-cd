@@ -1,6 +1,11 @@
-name: Build app image
+name: Build and test app image
 
 on: 
+  push:
+    branches-ignore:
+      - 'main'
+    tags-ignore:
+      - '**'
   workflow_call:
     inputs:
       push:
@@ -8,11 +13,6 @@ on:
         type: boolean
         description: publish image after build
         required: true
-  push:
-    branches:
-      - '**'
-    tags-ignore:
-      - '**'
 
 env:
   CONTAINER_REGISTRY: ghcr.io
