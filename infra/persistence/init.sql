@@ -1,0 +1,10 @@
+CREATE USER sentinel WITH PASSWORD '';
+CREATE USER core WITH PASSWORD '';
+CREATE USER notes WITH PASSWORD '';
+
+CREATE DATABASE "sentinel-dev" WITH OWNER sentinel;
+CREATE DATABASE "sentinel-rc" WITH OWNER sentinel;
+CREATE DATABASE "core-dev" WITH OWNER core;
+CREATE DATABASE "core-rc" WITH OWNER core;
+CREATE DATABASE "notes-dev" WITH OWNER notes;
+CREATE DATABASE "notes-rc" WITH OWNER notes;
