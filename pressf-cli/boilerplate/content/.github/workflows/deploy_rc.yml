@@ -23,7 +23,7 @@ jobs:
     needs: [build-publish]
     uses: ./.github/workflows/deploy.yml
     with:
-      namespace: ${{ inputs.namespace }}
+      namespace: ${{ inputs.namespace || 'plendy-rc' }}
       values-path: .pressf/k8s/values.rc.yaml
     secrets:
       kube-config: ${{ secrets.KUBE_CONFIG_RC }}
