@@ -1,4 +1,5 @@
 ARG BUILDER_IMAGE
+ARG RUNNER_IMAGE
 
 FROM ${BUILDER_IMAGE} as builder
 
@@ -8,8 +9,6 @@ ARG APP_VERSION
 ARG APP_GITSHA
 ARG RELEASE_AUTHOR
 ARG RELEASE_TIMESTAMP
-ARG TARGET_ARCH
-ARG TARGET_OS
 
 ARG PROJECT_MOUNT_POINT
 COPY ./ ${PROJECT_MOUNT_POINT}/
@@ -17,8 +16,6 @@ WORKDIR ${PROJECT_MOUNT_POINT}
 
 RUN set -eu \
 	&& make build \
-		TARGET_ARCH="${TARGET_ARCH}" \
-		TARGET_OS="${TARGET_OS}" \
 		PROJECT_NAME="${PROJECT_NAME}" \
 		APP_VERSION="${APP_VERSION}" \
 		APP_GITSHA="${APP_GITSHA}" \
@@ -26,7 +23,7 @@ RUN set -eu \
 		RELEASE_TIMESTAMP="${RELEASE_TIMESTAMP}" \
 	&& test -x /tmp/app
 
-FROM scratch
+FROM ${RUNNER_IMAGE} as runner
 
 # Tracing information about app.
 ARG PROJECT_NAME
@@ -44,4 +41,5 @@ LABEL pressf.release-author="${RELEASE_AUTHOR}"
 LABEL pressf.release-timestamp="${RELEASE_TIMESTAMP}"
 
 COPY --from=builder /tmp/app /usr/local/bin/app
+
 ENTRYPOINT ["/usr/local/bin/app"]

@@ -17,6 +17,7 @@ docker_build: FORCE
 	docker buildx build \
 		-f $(PROJECT_DOCKER_DIR)/Dockerfile \
 		--tag $(DOCKER_IMAGE) \
+		--build-arg 'RUNNER_IMAGE=$(RUNNER_IMAGE)' \
 		--build-arg 'BUILDER_IMAGE=$(BUILDER_IMAGE)' \
 		--build-arg 'PROJECT_MOUNT_POINT=$(PROJECT_MOUNT_POINT)' \
 		--build-arg 'PROJECT_NAME=$(PROJECT_NAME)' \

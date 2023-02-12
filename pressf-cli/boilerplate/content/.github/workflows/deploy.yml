@@ -62,6 +62,7 @@ jobs:
             --timeout 1m \
             --values ${{ inputs.values-path }} \
             --namespace ${{ inputs.namespace }} \
+            --create-namespace \
             --set image.registry=${{ env.CONTAINER_REGISTRY }} \
             --set image.repo=${{ steps.vars.outputs.image_repo }} \
             --set image.tag=${{ steps.vars.outputs.image_tag }} \

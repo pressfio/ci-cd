@@ -2,8 +2,11 @@ service:
   name: 'sentinel'
   args: ['api']
   replicas: 1
+  migrations:
+    enabled: true
   ports:
     grpc: true
+    internal: true
     diag: true
   env:
     - name: LOG_LEVEL
@@ -14,19 +17,27 @@ service:
       value: info
     - name: GRPC_GO_LOG_VERBOSITY_LEVEL
       value: '99'
+    - name: GRPC_INTERNAL_GO_LOG_FORMATTER
+      value: json
+    - name: GRPC_INTERNAL_GO_LOG_SEVERITY_LEVEL
+      value: info
+    - name: GRPC_INTERNAL_GO_LOG_VERBOSITY_LEVEL
+      value: '99'
+    - name: GRPC_INTERNAL_LISTEN_PORT
+      value: '5001'
+    - name: DB_TYPE
+      value: pg
+    - name: DB_HOST
+      value: postgres-postgresql.persistence.svc.cluster.local
     - name: DB_DATABASE
+      value: sentinel-rc
+    - name: DB_USER
       value: sentinel
-    - name: sentinel.svc
-      value: '6831'
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
           name: plendy-secrets
           key: db-password
-    - name: DB_TYPE
-      value: pg
-    - name: DB_USER
-      value: sentinel
     - name: DB_MASTER_DATABASE
       value: postgres
     - name: DB_MASTER_PASSWORD
@@ -61,6 +72,10 @@ service:
         secretKeyRef:
           name: plendy-secrets
           key: asi-key-jwt-issuer
+    - name: DB_MIGRATION_DEPLOY_JOB_ID
+      value: rc
+    - name: DB_MIGRATION_DRY_RUN
+      value: 'false'      
 
 grpcIngress:
   enabled: true

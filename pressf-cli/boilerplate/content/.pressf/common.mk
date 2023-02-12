@@ -24,6 +24,10 @@ GO_BUILDFLAGS ?= -mod=vendor -o=/tmp/app
 CGO_ENABLED   ?= 0
 # }}}
 
+# RUNNER variables {{{
+RUNNER_IMAGE ?= alpine:3.17.2
+# }}}
+
 # GIT variables {{{
 GIT_SHA       := $(shell git rev-parse HEAD;)
 GIT_SHORT_SHA := $(shell git rev-parse --short=8 HEAD;)

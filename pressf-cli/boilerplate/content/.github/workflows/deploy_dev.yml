@@ -22,7 +22,7 @@ jobs:
     secrets: inherit
 
   deploy:
-    # needs: [build-publish]
+    needs: [build-publish]
     uses: ./.github/workflows/deploy.yml
     with:
       namespace: ${{ inputs.namespace || 'plendy-dev' }}
