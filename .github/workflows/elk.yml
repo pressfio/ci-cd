@@ -42,7 +42,7 @@ jobs:
           --install \
           --atomic \
           --timeout 5m \
-          --values infra/observability/values.yaml \
+          --values infra/observability/elk/values.yaml \
           --set kibana.elasticsearch.security.auth.kibanaPassword=${{ secrets.KIBANA_PASSWORD }} \
           --set security.elasticPassword=${{ secrets.ES_PASSWORD }} \
           --namespace ${{ inputs.namespace }} \

@@ -1,0 +1,8 @@
+# https://github.com/bitnami/charts/blob/main/bitnami/grafana-loki
+gateway:
+  enabled: true
+ 
+  ingress:
+    enabled: true
+    hostname: loki.plendy.app
+    tls: true

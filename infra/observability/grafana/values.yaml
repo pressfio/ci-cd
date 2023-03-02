@@ -1,0 +1,20 @@
+datasources:
+  secretDefinition: 
+    apiVersion: 1
+    datasources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki-grafana-loki-query-frontend:3100
+      jsonData:
+        maxLines: 1000
+
+admin:
+  user: "admin"
+  password: ""
+
+ingress:
+  enabled: true
+  hostname: grafana.plendy.app
+  tls: true
+  

@@ -1,0 +1,1 @@
+{app="core", namespace="$ns"} | json |  line_format "{{.log}}" | json | app_cmd_name=`api`
