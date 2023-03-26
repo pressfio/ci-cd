@@ -42,7 +42,7 @@ jobs:
           --install \
           --atomic \
           --timeout 1m \
-          --values infra/persistence/values.yaml \
+          --values infra/persistence/postgres/values.yaml \
           --namespace ${{ inputs.namespace }} \
           --set global.postgresql.auth.postgresPassword=${{ secrets.POSTGRES_PASSWORD }} \
          postgres bitnami/postgresql

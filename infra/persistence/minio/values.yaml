@@ -1,0 +1,65 @@
+## Bitnami MinIO&reg; image version
+## ref: https://hub.docker.com/r/bitnami/minio/tags/
+## @param image.registry MinIO&reg; image registry
+## @param image.repository MinIO&reg; image repository
+## @param image.tag MinIO&reg; image tag (immutable tags are recommended)
+## @param image.digest MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Specify if debug logs should be enabled
+##
+image:
+  registry: docker.io
+  repository: bitnami/minio
+  tag: 2023.3.22-debian-11-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
+## Bitnami MinIO&reg; Client image version
+## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
+## @param clientImage.registry MinIO&reg; Client image registry
+## @param clientImage.repository MinIO&reg; Client image repository
+## @param clientImage.tag MinIO&reg; Client image tag (immutable tags are recommended)
+## @param clientImage.digest MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+##
+clientImage:
+  registry: docker.io
+  repository: bitnami/minio-client
+  tag: 2023.3.20-debian-11-r0
+  digest: ""
+## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
+## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+##
+mode: standalone
+## MinIO&reg; authentication parameters
+##
+auth:
+  ## @param auth.rootUser MinIO&reg; root username
+  ##
+  rootUser: admin
+  ## @param auth.rootPassword Password for MinIO&reg; root user
+  ##
+  rootPassword: ""
+## @param defaultBuckets Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
+## e.g:
+## defaultBuckets: "my-bucket, my-second-bucket"
+##
+defaultBuckets: "core, client"
+## @param disableWebUI Disable MinIO&reg; Web UI
+## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
+##
+disableWebUI: true
