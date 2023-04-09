@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  minio:
+    image: bitnami/minio:2023.2.27
+    environment:
+      MINIO_DEFAULT_BUCKETS: 'svc'
+      MINIO_ROOT_USER: 'minio-svc-user'
+      MINIO_ROOT_PASSWORD: 'minio-svc-user'
+    expose:
+      - 9000

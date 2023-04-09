@@ -19,6 +19,9 @@ build: FORCE
 			$|
 # }}}
 
+generate: FORCE
+	go generate ./...
+
 generate_common_types: FORCE
 	protoc -I protobuf/common \
 		--go_out=$(PROJECT_DIR) \
